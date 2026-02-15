@@ -5,7 +5,8 @@ This repository is a simple learning space for basic Git workflow habits.
 ## What you will learn
 
 - How to write short, clear commit messages (conventional-ish style)
-- What branches are and why teams use them (explained here, not required for this practice)
+- What branches are and why teams use them
+  (explained here, not required for this practice)
 - How tags and releases work together
 - How `.gitignore` helps keep your repository clean
 - How to follow a repeatable practice flow with 10 commits and 2 tags
@@ -16,12 +17,12 @@ This repository is a simple learning space for basic Git workflow habits.
 git-workflow-practice/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml                  # CI workflow that checks Markdown formatting
+│       └── ci.yml            # CI workflow that checks Markdown formatting
 ├── examples/
-│   └── project-log.txt             # Tiny text-based log used in the commit practice steps
-├── .gitignore                      # Files/folders Git should ignore
-├── CHEATSHEET.md                   # Quick "what command is for what" reference
-└── README.md                       # Main learning guide and reproducible instructions
+│   └── project-log.txt       # Tiny text-based log used in commit practice
+├── .gitignore                # Files/folders Git should ignore
+├── CHEATSHEET.md             # Quick "what command is for what" reference
+└── README.md                 # Main guide and reproducible instructions
 ```
 
 ## 1) Commit style (short and conventional-ish)
@@ -54,7 +55,8 @@ Still, you should know the idea:
 - `feature/*`: where teams build new work safely
 - Pull Request (PR): review step before merging feature work into `main`
 
-So even if you do not use branches here, this model is how most teams collaborate.
+So even if you do not use branches here,
+this model is how most teams collaborate.
 
 ## 3) Tags and releases
 
@@ -65,7 +67,8 @@ Common patterns:
 - `v0.1.0` -> first practice milestone
 - `v1.0.0` -> first stable release-like checkpoint
 
-A **release** on Git hosting platforms is usually built from a tag and includes notes.
+A **release** on Git hosting platforms
+is usually built from a tag and includes notes.
 
 ## 4) `.gitignore` examples
 
@@ -75,7 +78,8 @@ This repo includes practical ignore patterns for:
 - Editor settings (`.vscode/`, `.idea/`)
 - Logs and temp files (`*.log`, `tmp/`)
 
-If a file should stay local and not be shared, add a pattern to `.gitignore`.
+If a file should stay local and not be shared,
+add a pattern to `.gitignore`.
 
 ## 5) Reproducible practice: 10 commits + 2 tags
 
@@ -142,7 +146,6 @@ git commit -m "docs: add project log entry 10"
 git tag -a v1.0.0 -m "practice completion after 10 commits"
 
 # Verify
-
 git log --oneline --decorate -n 12
 git tag --list
 ```
