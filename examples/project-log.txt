@@ -1,0 +1,6 @@
+# Project Log (Practice File)
+
+Use this file to add one short line per commit during your Git practice.
+
+Example line format:
+[01] wrote first commit note
