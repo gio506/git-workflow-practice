@@ -1,0 +1,6 @@
+# Project Log
+
+Use this file to practice tiny, frequent commits.
+Each new line can represent one learning step.
+
+- starter: repository initialized
