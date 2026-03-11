@@ -1,64 +1,62 @@
-# Git Beginner Cheatsheet
+# Git Workflow Cheatsheet
 
-Quick reference for what each command is for.
+## 1) Branch and sync flow
 
-## Most popular commands (daily use)
+```bash
+# create branches (one-time)
+git branch main
+git branch dev
 
-### Check status and history
+# update local branches
+git switch main
+git pull origin main
+git switch dev
+git pull origin dev
 
-- `git status` -> show changed files and branch state
-- `git log --oneline --decorate -n 10` -> show compact recent history
-- `git diff` -> show unstaged changes
-- `git diff --staged` -> show staged changes
+# start feature work from dev
+git switch -c feature/short-topic
+```
 
-### Stage and commit
+## 2) Daily work
 
-- `git add <file>` -> stage one file for next commit
-- `git add .` -> stage all current changes
-- `git commit -m "docs: add guide"` -> create commit with short message
-- `git commit --amend` -> update most recent commit
+```bash
+git status
+git add <file>
+git commit -m "docs: short smart message"
+git push -u origin feature/short-topic
+```
 
-### Branch basics
+## 3) PR flow
 
-- `git branch` -> list local branches
-- `git switch -c feature/my-change` -> create and switch to new branch
-- `git switch main` -> return to main branch
-- `git merge feature/my-change` -> merge branch into current branch
+```bash
+# PR 1: feature/* -> dev
+# PR 2: dev -> main (after review and CI)
+```
 
-### Remote basics
+## 4) Useful inspection commands
 
-- `git remote -v` -> list remote URLs
-- `git pull` -> fetch and merge latest remote updates
-- `git push` -> push commits to remote
-- `git push --tags` -> push local tags to remote
+```bash
+git log --oneline --decorate -n 12
+git diff
+git diff --staged
+git branch -a
+```
 
-### Tags and release checkpoints
+## 5) Tags and releases
 
-- `git tag -a v0.1.0 -m "milestone"` -> create annotated tag
-- `git tag --list` -> list all tags
-- `git show v0.1.0` -> inspect tagged commit details
+```bash
+git switch main
+git pull origin main
+git tag -a v0.1.0 -m "first stable practice release"
+git push origin v0.1.0
+git show v0.1.0
+```
 
-## Less common but useful commands
+## 6) Quick undo commands
 
-### Undo and restore
-
-- `git restore <file>` -> discard unstaged file changes
-- `git restore --staged <file>` -> unstage file but keep local edits
-- `git reset --soft HEAD~1` -> undo last commit, keep changes staged
-- `git reset --hard HEAD~1` -> undo last commit and discard local changes
-
-### Temporary save (stash)
-
-- `git stash` -> save uncommitted work temporarily
-- `git stash list` -> show stashed entries
-- `git stash pop` -> reapply latest stash and remove it from stash list
-
-### Investigation and cleanup
-
-- `git blame <file>` -> show who changed each line last
-- `git reflog` -> show local HEAD movement history
-- `git clean -fd` -> remove untracked files and folders
-
-### Ignore rules
-
-- Edit `.gitignore` to keep local-only files out of Git tracking.
+```bash
+git restore <file>
+git restore --staged <file>
+git commit --amend
+git reset --soft HEAD~1
+```
