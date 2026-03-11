@@ -1,164 +1,108 @@
 # Git Workflow Practice (Beginner Friendly)
 
-This repository is a simple learning space for basic Git workflow habits.
+![CI](https://img.shields.io/badge/CI-markdown%20lint%20%7C%20links%20%7C%20templates-blue)
 
-## What you will learn
+This repository helps you practice a **clean Git workflow** using two long-lived branches:
 
-- How to write short, clear commit messages (conventional-ish style)
-- What branches are and why teams use them
-  (explained here, not required for this practice)
-- How tags and releases work together
-- How `.gitignore` helps keep your repository clean
-- How to follow a repeatable practice flow with 10 commits and 2 tags
+- `main` → stable branch
+- `dev` → integration branch for day-to-day changes
 
-## Repository tree (with quick explanations)
+## Learning goals
 
-```text
-git-workflow-practice/
-├── .github/
-│   └── workflows/
-│       └── ci.yml            # CI workflow that checks Markdown formatting
-├── examples/
-│   └── project-log.txt       # Tiny text-based log used in commit practice
-├── .gitignore                # Files/folders Git should ignore
-├── CHEATSHEET.md             # Quick "what command is for what" reference
-└── README.md                 # Main guide and reproducible instructions
-```
+- Write clean, short commit messages.
+- Open pull requests (PRs) with a repeatable flow.
+- Use issue templates to report bugs and request features.
+- Create tags/releases for milestones.
+- Run CI checks before merging.
 
-## 1) Commit style (short and conventional-ish)
+## Recommended flow (`main` + `dev`)
 
-Use this lightweight format:
+Follow this order every time:
 
-- `type: short description`
-- Keep it short, action-oriented, and lowercase after the `:`
+1. Create/switch to your work branch from `dev`.
+2. Sync with the latest `main` and `dev`.
+3. Make small, focused commits.
+4. Open a PR **into `dev`**.
+5. After testing/review in `dev`, open `dev -> main` PR.
 
-Good `type` values for beginners:
-
-- `feat` -> new feature/content
-- `fix` -> bug or correction
-- `docs` -> documentation only
-- `chore` -> maintenance work
-
-Examples:
-
-- `docs: add beginner git workflow guide`
-- `feat: add project log starter`
-- `chore: add markdown lint workflow`
-
-## 2) Branching concepts (explained only)
-
-For this repo, practice on `main` only.
-
-Still, you should know the idea:
-
-- `main`: stable/default branch
-- `feature/*`: where teams build new work safely
-- Pull Request (PR): review step before merging feature work into `main`
-
-So even if you do not use branches here,
-this model is how most teams collaborate.
-
-## 3) Tags and releases
-
-A **tag** is a named pointer to a commit (often used for versions).
-
-Common patterns:
-
-- `v0.1.0` -> first practice milestone
-- `v1.0.0` -> first stable release-like checkpoint
-
-A **release** on Git hosting platforms
-is usually built from a tag and includes notes.
-
-## 4) `.gitignore` examples
-
-This repo includes practical ignore patterns for:
-
-- OS files (`.DS_Store`, `Thumbs.db`)
-- Editor settings (`.vscode/`, `.idea/`)
-- Logs and temp files (`*.log`, `tmp/`)
-
-If a file should stay local and not be shared,
-add a pattern to `.gitignore`.
-
-## 5) Reproducible practice: 10 commits + 2 tags
-
-Follow these exact commands from the repo root:
+### Example commands
 
 ```bash
-# 0) Start clean
-git status
+# one-time setup (if branches do not exist yet)
+git branch main
+git branch dev
 
-# 1) Create first entry
-echo "[01] init project log" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 01"
+# start from dev
+# (your team can use names like feature/readme-cleanup)
+git switch dev
+git pull origin main
+git pull origin dev
+git switch -c feature/practice-docs
 
-# 2)
-echo "[02] describe goal" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 02"
-
-# 3)
-echo "[03] write first workflow note" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 03"
-
-# 4)
-echo "[04] track progress" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 04"
-
-# 5)
-echo "[05] checkpoint before first tag" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 05"
-
-# Tag after commit 5
-git tag -a v0.1.0 -m "practice milestone after 5 commits"
-
-# 6)
-echo "[06] continue practice" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 06"
-
-# 7)
-echo "[07] refine notes" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 07"
-
-# 8)
-echo "[08] add review reminder" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 08"
-
-# 9)
-echo "[09] prep for final tag" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 09"
-
-# 10)
-echo "[10] complete learning cycle" >> examples/project-log.txt
-git add examples/project-log.txt
-git commit -m "docs: add project log entry 10"
-
-# Tag after commit 10
-git tag -a v1.0.0 -m "practice completion after 10 commits"
-
-# Verify
-git log --oneline --decorate -n 12
-git tag --list
+# do your edits
+git add .
+git commit -m "docs: add review checklist"
+git push -u origin feature/practice-docs
 ```
 
-Expected result:
+Then create PRs:
 
-- 10 new commits from the practice flow
-- 2 tags: `v0.1.0` and `v1.0.0`
+- `feature/practice-docs` -> `dev`
+- `dev` -> `main` (after approval + checks)
 
-## 6) CI basics in this repo
+## Clean commit style (short + smart)
 
-This repo contains one CI workflow:
+Use a short prefix and a clear action:
 
-- **Markdown Lint**: checks Markdown files on push and pull requests.
+- `docs: update release checklist`
+- `feat: add bug issue template`
+- `fix: correct tag command example`
+- `chore: tune ci spellcheck`
 
-The workflow file is at `.github/workflows/ci.yml`.
+More examples and rules: [docs/commit-style.md](docs/commit-style.md)
+
+## PR and issue templates
+
+- PR template: [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
+- Bug issue template: [.github/ISSUE_TEMPLATE/bug.md](.github/ISSUE_TEMPLATE/bug.md)
+- Feature issue template: [.github/ISSUE_TEMPLATE/feature.md](.github/ISSUE_TEMPLATE/feature.md)
+
+## Release tags (simple process)
+
+Use tags when a milestone is stable:
+
+```bash
+git switch main
+git pull origin main
+git tag -a v0.1.0 -m "first workflow milestone"
+git push origin v0.1.0
+```
+
+For each release:
+
+1. Confirm CI is green.
+2. Confirm review checklist is complete.
+3. Tag from `main`.
+4. Add release notes.
+
+See: [docs/review-checklist.md](docs/review-checklist.md)
+
+## Local quality checks
+
+Run checks before opening a PR:
+
+```bash
+npx markdownlint-cli "**/*.md"
+python3 -m pip install --user mdformat-link-checker
+python3 -m mdformat_link_check README.md CHEATSHEET.md FILES_EXPLAINED.md docs/*.md .github/*.md .github/ISSUE_TEMPLATE/*.md
+codespell
+```
+
+If tools are not installed globally, use CI as the fallback validator.
+
+## Repository map
+
+- [CHEATSHEET.md](CHEATSHEET.md) → quick Git command reference
+- [FILES_EXPLAINED.md](FILES_EXPLAINED.md) → what each file is for
+- [docs/commit-style.md](docs/commit-style.md) → short commit message guide
+- [docs/review-checklist.md](docs/review-checklist.md) → lightweight PR/release checklist
