@@ -36,8 +36,8 @@ jobs:
           config-file: '.github/link-check-config.json'
           folder-path: '.'
 
-  validate-templates-and-spellcheck:
-    name: Stage 3 - Validate templates + spellcheck
+  validate-templates:
+    name: Stage 3 - Validate templates
     runs-on: ubuntu-latest
     needs: check-links
     steps:
@@ -49,6 +49,26 @@ jobs:
           test -f .github/PULL_REQUEST_TEMPLATE.md
           test -f .github/ISSUE_TEMPLATE/bug.md
           test -f .github/ISSUE_TEMPLATE/feature.md
+
+  docs-guard-and-spellcheck:
+    name: Stage 4 - Docs guard + spellcheck
+    runs-on: ubuntu-latest
+    needs: validate-templates
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify key docs exist
+        run: |
+          test -f README.md
+          test -f CHEATSHEET.md
+          test -f FILES_EXPLAINED.md
+          test -f docs/commit-style.md
+          test -f docs/review-checklist.md
+
+      - name: Verify README mentions dev to main flow
+        run: |
+          grep -Eq 'dev.*main|main.*dev' README.md
 
       - name: Basic spellcheck
         uses: codespell-project/actions-codespell@v2

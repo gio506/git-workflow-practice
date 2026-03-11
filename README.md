@@ -1,8 +1,9 @@
 # Git Workflow Practice (Beginner Friendly)
 
-![CI](https://img.shields.io/badge/CI-markdown%20lint%20%7C%20links%20%7C%20templates-blue)
+![CI](https://img.shields.io/badge/CI-markdown%20lint%20%7C%20links-blue)
 
-This repository helps you practice a **clean Git workflow** using two long-lived branches:
+This repository helps you practice a **clean Git workflow**
+using two long-lived branches:
 
 - `main` → stable branch
 - `dev` → integration branch for day-to-day changes
@@ -23,7 +24,7 @@ Follow this order every time:
 2. Sync with the latest `main` and `dev`.
 3. Make small, focused commits.
 4. Open a PR **into `dev`**.
-5. After testing/review in `dev`, open `dev -> main` PR.
+5. After review in `dev`, open `dev -> main` PR.
 
 ### Example commands
 
@@ -59,13 +60,17 @@ Use a short prefix and a clear action:
 - `fix: correct tag command example`
 - `chore: tune ci spellcheck`
 
-More examples and rules: [docs/commit-style.md](docs/commit-style.md)
+More examples and rules:
+[docs/commit-style.md](docs/commit-style.md)
 
 ## PR and issue templates
 
-- PR template: [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
-- Bug issue template: [.github/ISSUE_TEMPLATE/bug.md](.github/ISSUE_TEMPLATE/bug.md)
-- Feature issue template: [.github/ISSUE_TEMPLATE/feature.md](.github/ISSUE_TEMPLATE/feature.md)
+- PR template:
+  [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
+- Bug issue template:
+  [.github/ISSUE_TEMPLATE/bug.md](.github/ISSUE_TEMPLATE/bug.md)
+- Feature issue template:
+  [.github/ISSUE_TEMPLATE/feature.md](.github/ISSUE_TEMPLATE/feature.md)
 
 ## Release tags (simple process)
 
@@ -94,15 +99,20 @@ Run checks before opening a PR:
 ```bash
 npx markdownlint-cli "**/*.md"
 python3 -m pip install --user mdformat-link-checker
-python3 -m mdformat_link_check README.md CHEATSHEET.md FILES_EXPLAINED.md docs/*.md .github/*.md .github/ISSUE_TEMPLATE/*.md
+python3 -m mdformat_link_check \
+  README.md CHEATSHEET.md FILES_EXPLAINED.md \
+  docs/*.md .github/*.md .github/ISSUE_TEMPLATE/*.md
 codespell
 ```
 
-If tools are not installed globally, use CI as the fallback validator.
+If tools are not installed globally,
+use the 4-stage CI as fallback validation.
 
 ## Repository map
 
 - [CHEATSHEET.md](CHEATSHEET.md) → quick Git command reference
 - [FILES_EXPLAINED.md](FILES_EXPLAINED.md) → what each file is for
-- [docs/commit-style.md](docs/commit-style.md) → short commit message guide
-- [docs/review-checklist.md](docs/review-checklist.md) → lightweight PR/release checklist
+- [docs/commit-style.md](docs/commit-style.md) →
+  short commit message guide
+- [docs/review-checklist.md](docs/review-checklist.md) →
+  lightweight PR/release checklist
