@@ -1,19 +1,14 @@
 # Git Workflow Cheatsheet
 
+Use this file as the fast command map after reading `README.md`.
+
 ## 1) Branch and sync flow
 
 ```bash
-# create branches (one-time)
-git branch main
-git branch dev
-
-# update local branches
 git switch main
 git pull origin main
 git switch dev
 git pull origin dev
-
-# start feature work from dev
 git switch -c feature/short-topic
 ```
 
@@ -28,10 +23,8 @@ git push -u origin feature/short-topic
 
 ## 3) PR flow
 
-```bash
-# PR 1: feature/* -> dev
-# PR 2: dev -> main (after review and CI)
-```
+- `feature/* -> dev`
+- `dev -> main` after review and green CI
 
 ## 4) Useful inspection commands
 
@@ -52,11 +45,18 @@ git push origin v0.1.0
 git show v0.1.0
 ```
 
-## 6) Quick undo commands
+## 6) Useful restore commands
+
+- `git restore <file>` -> discard unstaged file changes
+- `git restore --staged <file>` -> unstage file but keep local edits
+- `git reset --soft HEAD~1` -> undo last commit, keep changes staged
+- `git reset --hard HEAD~1` -> undo last commit and discard local changes
+- `git stash` -> save uncommitted work temporarily
+- `git stash pop` -> restore latest stashed work
+
+## Repo validation
 
 ```bash
-git restore <file>
-git restore --staged <file>
-git commit --amend
-git reset --soft HEAD~1
+chmod +x scripts/validate_repo.sh
+bash scripts/validate_repo.sh
 ```

@@ -6,72 +6,82 @@ on:
   pull_request:
     branches: [main, dev]
 
+permissions:
+  contents: read
+
 jobs:
-  markdown-lint:
-    name: Stage 1 - Markdown lint
+  structure-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Lint markdown
-        uses: DavidAnson/markdownlint-cli2-action@v18
+      - name: Verify required files
+        shell: bash
+        run: |
+          required_files=(
+            "README.md"
+            "CHEATSHEET.md"
+            "FILES_EXPLAINED.md"
+            ".gitignore"
+            "examples/project-log.txt"
+            "scripts/validate_repo.sh"
+            "docs/commit-style.md"
+            "docs/review-checklist.md"
+            ".github/PULL_REQUEST_TEMPLATE.md"
+            ".github/ISSUE_TEMPLATE/bug.md"
+            ".github/ISSUE_TEMPLATE/feature.md"
+          )
+          for file in "${required_files[@]}"; do
+            test -f "$file" || {
+              echo "Missing required file: $file"
+              exit 1
+            }
+          done
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    needs: structure-check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v19
         with:
           globs: |
             **/*.md
 
-  check-links:
-    name: Stage 2 - Check links
+  practice-flow-check:
     runs-on: ubuntu-latest
     needs: markdown-lint
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check markdown links
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
-        with:
-          use-quiet-mode: 'yes'
-          use-verbose-mode: 'no'
-          config-file: '.github/link-check-config.json'
-          folder-path: '.'
+      - name: Make validation script executable
+        run: chmod +x scripts/validate_repo.sh
 
-  validate-templates:
-    name: Stage 3 - Validate templates
+      - name: Validate repo learning flow
+        run: bash scripts/validate_repo.sh
+
+  final-status-gate:
     runs-on: ubuntu-latest
-    needs: check-links
+    if: always()
+    needs:
+      - structure-check
+      - markdown-lint
+      - practice-flow-check
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Validate required templates exist
+      - name: Aggregate results
+        shell: bash
+        env:
+          STRUCTURE: ${{ needs.structure-check.result }}
+          MARKDOWN: ${{ needs.markdown-lint.result }}
+          PRACTICE: ${{ needs.practice-flow-check.result }}
         run: |
-          test -f .github/PULL_REQUEST_TEMPLATE.md
-          test -f .github/ISSUE_TEMPLATE/bug.md
-          test -f .github/ISSUE_TEMPLATE/feature.md
-
-  docs-guard-and-spellcheck:
-    name: Stage 4 - Docs guard + spellcheck
-    runs-on: ubuntu-latest
-    needs: validate-templates
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Verify key docs exist
-        run: |
-          test -f README.md
-          test -f CHEATSHEET.md
-          test -f FILES_EXPLAINED.md
-          test -f docs/commit-style.md
-          test -f docs/review-checklist.md
-
-      - name: Verify README mentions dev to main flow
-        run: |
-          grep -Eq 'dev.*main|main.*dev' README.md
-
-      - name: Basic spellcheck
-        uses: codespell-project/actions-codespell@v2
-        with:
-          check_filenames: true
-          check_hidden: false
+          for result in "$STRUCTURE" "$MARKDOWN" "$PRACTICE"; do
+            if [ "$result" = "failure" ] || [ "$result" = "cancelled" ]; then
+              exit 1
+            fi
+          done

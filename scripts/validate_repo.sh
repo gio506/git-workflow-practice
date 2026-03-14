@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+
+required_files=(
+  "README.md"
+  "CHEATSHEET.md"
+  "FILES_EXPLAINED.md"
+  ".gitignore"
+  "examples/project-log.txt"
+)
+
+for file in "${required_files[@]}"; do
+  test -f "$file" || {
+    echo "Missing required file: $file" >&2
+    exit 1
+  }
+done
+
+grep -q "project" README.md
+grep -q "\[01\]" examples/project-log.txt || grep -q "project log" examples/project-log.txt
+
+echo "Repository validation passed."
