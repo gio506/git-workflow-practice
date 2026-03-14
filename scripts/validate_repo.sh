@@ -19,6 +19,16 @@ for file in "${required_files[@]}"; do
   }
 done
 
+git show-ref --verify --quiet refs/heads/main || {
+  echo "Missing local branch: main" >&2
+  exit 1
+}
+
+git show-ref --verify --quiet refs/heads/dev || {
+  echo "Missing local branch: dev" >&2
+  exit 1
+}
+
 grep -q "project" README.md
 grep -q "\[01\]" examples/project-log.txt || grep -q "project log" examples/project-log.txt
 
