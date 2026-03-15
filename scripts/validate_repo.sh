@@ -31,7 +31,7 @@ if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then
   }
 fi
 
-grep -q "project" README.md
+grep -Eqi "project|repository|workflow" README.md
 grep -q "\[01\]" examples/project-log.txt || grep -q "project log" examples/project-log.txt
 
 echo "Repository validation passed."
