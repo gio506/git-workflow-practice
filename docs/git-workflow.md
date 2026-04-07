@@ -4,7 +4,7 @@ This repository demonstrates clean Git habits used in professional DevOps workfl
 
 ## Branch Strategy
 
-```
+```text
 main          ← stable, protected — only merged from dev via PR
   └── dev     ← integration branch — features merged here first
         └── feat/* or fix/* ← short-lived feature branches
@@ -34,7 +34,7 @@ git push origin feat/add-ci-badge
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```text
 <type>(<scope>): <short description>
 
 [optional body]
